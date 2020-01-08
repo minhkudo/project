@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author MinhKudo
  */
-@Controller
+
 @RequestMapping("subTeach")
 public class SubTeachController {
 
