@@ -5,9 +5,12 @@
  */
 package com.dev.vin.demo.controller;
 
+import com.dev.vin.demo.model.Result;
 import com.dev.vin.demo.service.StudentService;
 import com.dev.vin.demo.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +38,14 @@ public class LoginController {
 
     @PostMapping(value = "/loginStudent")
     @ResponseBody
-    public boolean loginStudent(Model model,
+    public ResponseEntity<Result> loginStudent(Model model,
             @RequestParam(value = "code", required = true) String code,
             @RequestParam(value = "password", required = true) String password) {
-        return studentService.login(code, password);
+        String token = studentService.login(code, password);
+        if (token != null) {
+            return new ResponseEntity<>(new Result(Result.SUCCESS, token), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Result(Result.ERROR, token), HttpStatus.OK);
     }
 
     @GetMapping(value = "/loginTeach")
@@ -70,7 +77,7 @@ public class LoginController {
             return false;
         }
     }
-    
+
 //    @GetMapping(value = "/pageStudent/index")
 //    public String getIndexStudent() {
 //        return "pageStudent/index";

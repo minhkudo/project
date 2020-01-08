@@ -57,7 +57,7 @@
         <script>
             var app = angular.module('listStudent', []);
             app.controller('studentController', function ($scope, $http, $filter) {
-                
+
                 $scope.code = "";
                 $scope.password = "";
 
@@ -69,17 +69,19 @@
                     }).then(
                             function Succes(resp) {
                                 console.log(resp.data);
-                                if (resp.data === true)
+                                if (resp.data.code === 1)
                                 {
+                                    var token = resp.data.message;
+                                    $http.defaults.headers.common['Authorization'] = token;
                                     $scope.message = "Đăng Nhập Thành Công";
                                     window.location = urlBase + '/pageStudent/index';
                                 } else {
                                     $scope.message = "Đăng Nhập Thất Bại";
                                 }
                             }, function Error(resp) {
-                                console.log("Error: " + resp.status + " : " + resp.data);
-                                console.log(resp.data);
-                                $scope.message = "Đăng Nhập Thất Bại";
+                        console.log("Error: " + resp.status + " : " + resp.data);
+                        console.log(resp.data);
+                        $scope.message = "Đăng Nhập Thất Bại";
                     });
                 };
             });

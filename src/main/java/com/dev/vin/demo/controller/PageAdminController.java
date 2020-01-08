@@ -17,10 +17,6 @@ import com.dev.vin.demo.service.StudentService;
 import com.dev.vin.demo.service.SubTeachService;
 import com.dev.vin.demo.service.SubjectService;
 import com.dev.vin.demo.service.TeacherService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +40,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping(value = "/pageAdmin")
-@Api(value = "Page Admin")
 public class PageAdminController {
 
     @Autowired
@@ -70,13 +65,6 @@ public class PageAdminController {
         return "teach/view";
     }
 
-//    @ApiOperation(value = "Get all user", responseContainer = "List")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "OK"),
-//            @ApiResponse(code = 403, message = "Forbidden"),
-//            @ApiResponse(code = 404, message = "Not found"),
-//            @ApiResponse(code = 500, message = "Internal Server Error"),
-//    })
     @PostMapping(value = {"/teach", "/teach/view"})
     @ResponseBody
     public ResponseEntity<AngularModel<Teach>> listDataTeach(Model model, HttpServletRequest request) {

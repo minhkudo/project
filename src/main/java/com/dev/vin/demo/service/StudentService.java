@@ -8,6 +8,7 @@ package com.dev.vin.demo.service;
 import com.dev.vin.demo.config.Constants;
 import com.dev.vin.demo.dao.StudentDao;
 import com.dev.vin.demo.model.Student;
+import com.dev.vin.demo.util.JwtUltis;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -73,8 +74,9 @@ public class StudentService {
         return rs;
     }
 
-    public boolean login(String code, String password) {
-        boolean rs = false;
+    public String login(String code, String password) {
+//        boolean rs = false;
+        String jwt = null;
         Student student = null;
         String sql = "Select * from student where CODE = ? AND PASSWORD = ? ";
         System.out.println("sql: " + sql);
@@ -85,11 +87,12 @@ public class StudentService {
             query.setParameter(i++, password);
             student = (Student) query.getSingleResult();
             if (student != null) {
-                rs = true;
+                jwt = JwtUltis.generateToken(code, "MEMBER");
             }
+            
         } catch (Exception e) {
             System.out.println("Chưa tồn tại tài khoản");
         }
-        return rs;
+        return jwt;
     }
 }
