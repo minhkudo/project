@@ -39,7 +39,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  *
  * @author MinhKudo
  */
-
 @RequestMapping("student")
 public class StudentController {
 
@@ -199,6 +198,7 @@ public class StudentController {
     public ArrayList<Sub_teach> listDataDoReig(Model model, HttpServletRequest request) {
         String codeSub = RequestTool.getString(request, "codeSub");
         String codeTeach = RequestTool.getString(request, "codeTeach");
+        String codeStudent = null;
         int status = RequestTool.getInt(request, "status", -1);
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
@@ -206,7 +206,7 @@ public class StudentController {
         System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach> Sub_teach = subTeachSerivce.listDoReig(crPage, maxRow, codeSub, codeTeach);
+        ArrayList<Sub_teach> Sub_teach = subTeachSerivce.listDoReig(crPage, maxRow, codeSub, codeTeach, codeStudent);
 //        int count = subTeachSerivce.count(code, name, status);
 //        System.out.println("count: " + count);
         return Sub_teach;
@@ -242,6 +242,7 @@ public class StudentController {
     public ArrayList<Sub_teach> listDataNotReig(Model model, HttpServletRequest request) {
         String codeSub = RequestTool.getString(request, "codeSub");
         String codeTeach = RequestTool.getString(request, "codeTeach");
+        String codeStudent = null;
         int status = RequestTool.getInt(request, "status", -1);
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
@@ -249,7 +250,7 @@ public class StudentController {
         System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach> Sub_teach = subTeachSerivce.listNotReig(crPage, maxRow, codeSub, codeTeach);
+        ArrayList<Sub_teach> Sub_teach = subTeachSerivce.listNotReig(crPage, maxRow, codeSub, codeTeach, codeStudent);
 //        int count = subTeachSerivce.count(code, name, status);
 //        System.out.println("count: " + count);
         return Sub_teach;

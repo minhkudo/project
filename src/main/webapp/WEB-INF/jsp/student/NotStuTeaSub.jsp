@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=utf-8" %><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="../include/css.jsp" %>
+<%@page session = "true" %>
+<%@ include file="../pageStudent/include/css.jsp" %>
 <%@ include file="../pageStudent/include/menu.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
 <div id="content">
@@ -40,7 +41,7 @@
                 </div>
                 <div class="widget-box">
                     <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
-                        <h5>Danh sách Môn Học Chưa Đăng Ký <span ng-model="message" style="color: fuchsia;margin-left: 15px">{{message}}{{result.message}}</span></h5>
+                        <h5>Danh sách Môn Học Chưa Đăng Ký <span ng-model="message" style="color: fuchsia;margin-left: 15px">{{result.message}}</span></h5>
                     </div>
                     <div class="widget-content nopadding">
                         <table class="table table-bordered table-striped">
@@ -53,6 +54,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                ${token}
                                 <tr ng-repeat="std in listData">
                                     <td>{{$index + 1}}</td>
                                     <td>{{std.code_sub}}</td>
@@ -97,12 +99,14 @@
                                                         $http({
                                                             method: 'POST',
                                                             url: urlBase + '/pageStudent/NotStuTeaSub',
-                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub, codeTeach: $scope.codeTeach}
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub, codeTeach: $scope.codeTeach},
+                                                            headers: {
+                                                                Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                            }
                                                         }).then(
                                                                 function Succes(res) { // success
                                                                     $scope.listData = res.data.listObject;
                                                                     $scope.totalRow = res.data.totalRow;
-                                                                    $scope.message = str;
                                                                     $scope.result = res.data.result;
                                                                     console.log($scope.result.message);
                                                                     if (!angular.isUndefined(str) && str !== '') {
@@ -145,7 +149,10 @@
                                                             $http({
                                                                 method: "POST",
                                                                 url: urlBase + "/pageStudent/registerDo",
-                                                                params: {codeSub: codeSub, codeTeach: codeTeach}
+                                                                params: {codeSub: codeSub, codeTeach: codeTeach},
+                                                                headers: {
+                                                                    Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                                }
                                                             }).then(function Succes(resp) {
                                                                 console.log(resp.data.messing);
                                                                 $scope.reloadFilter(resp.data.messing);

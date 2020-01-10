@@ -8,6 +8,7 @@ package com.dev.vin.demo.service;
 import com.dev.vin.demo.config.Constants;
 import com.dev.vin.demo.dao.TeacherDao;
 import com.dev.vin.demo.model.Teach;
+import com.dev.vin.demo.util.JwtUltis;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -74,8 +75,8 @@ public class TeacherService {
         return rs;
     }
 
-    public boolean login(String code, String password) {
-        boolean rs = false;
+    public String login(String code, String password) {
+        String jwt = null;
         Teach teach = null;
         String sql = "Select * from teach where CODE = ? AND PASSWORD = ?";
         System.out.println("sql: " + sql);
@@ -86,12 +87,12 @@ public class TeacherService {
             query.setParameter(i++, password);
             teach = (Teach) query.getSingleResult();
             if (teach != null) {
-                rs = true;
+                jwt = JwtUltis.generateToken(code, "USER");
             }
         } catch (Exception e) {
-            rs = false;
+            e.printStackTrace();
         }
 
-        return rs;
+        return jwt;
     }
 }

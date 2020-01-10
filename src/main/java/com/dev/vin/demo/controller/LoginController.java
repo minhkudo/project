@@ -5,12 +5,19 @@
  */
 package com.dev.vin.demo.controller;
 
+import com.dev.vin.demo.commons.Tool;
 import com.dev.vin.demo.model.Result;
 import com.dev.vin.demo.service.StudentService;
 import com.dev.vin.demo.service.TeacherService;
+import com.dev.vin.demo.util.JwtUltis;
+import com.dev.vin.demo.util.Share;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,12 +47,19 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<Result> loginStudent(Model model,
             @RequestParam(value = "code", required = true) String code,
-            @RequestParam(value = "password", required = true) String password) {
+            @RequestParam(value = "password", required = true) String password,
+            HttpServletRequest request) {
+        System.out.println("code: " + code);
+        System.out.println("password: " + password);
         String token = studentService.login(code, password);
-        if (token != null) {
-            return new ResponseEntity<>(new Result(Result.SUCCESS, token), HttpStatus.OK);
+        HttpSession session = request.getSession(true);
+        Share.listSessionStudent.add(session.getId());
+        System.out.println("id: " + session.getId());
+        session.setAttribute(session.getId(), token);
+        if (Tool.checkNull(token)) {
+            return new ResponseEntity<>(new Result(Result.ERROR, "Đăng Nhập Thất Bại"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new Result(Result.ERROR, token), HttpStatus.OK);
+        return new ResponseEntity<>(new Result(Result.SUCCESS, "Đăng Nhập Thành Công"), HttpStatus.OK);
     }
 
     @GetMapping(value = "/loginTeach")
@@ -55,10 +69,16 @@ public class LoginController {
 
     @PostMapping(value = "/loginTeach")
     @ResponseBody
-    public boolean loginTeach(Model model,
+    public ResponseEntity<Result> loginTeach(Model model,
             @RequestParam(value = "code", required = true) String code,
-            @RequestParam(value = "password", required = true) String password) {
-        return teachService.login(code, password);
+            @RequestParam(value = "password", required = true) String password,
+            HttpServletRequest request) {
+        Share.token_teach = teachService.login(code, password);
+        if (!Tool.checkNull(Share.token_teach)) {
+
+            return new ResponseEntity<>(new Result(Result.SUCCESS, "Đăng Nhập Thành Công"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Result(Result.ERROR, "Đăng Nhập Thất Bại"), HttpStatus.OK);
     }
 
     @GetMapping(value = "/loginAdmin")
@@ -68,26 +88,33 @@ public class LoginController {
 
     @PostMapping(value = "/loginAdmin")
     @ResponseBody
-    public boolean loginAdmin(Model model,
+    public ResponseEntity<Result> loginAdmin(Model model,
             @RequestParam(value = "code", required = true) String code,
             @RequestParam(value = "password", required = true) String password) {
         if (code.equals("1") && password.equals("1")) {
-            return true;
-        } else {
-            return false;
+            Share.token_admin = JwtUltis.generateToken("1", "ADMIN");
         }
+        if (Share.token_admin != null) {
+            return new ResponseEntity<>(new Result(Result.SUCCESS, "Đăng Nhập Thành Công"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Result(Result.ERROR, "Đăng Nhập Thất Bại"), HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/pageStudent/index")
-//    public String getIndexStudent() {
-//        return "pageStudent/index";
-//    }
-//    @GetMapping(value = "/pageTeach/index")
-//    public String getIndexTeach() {
-//        return "pageTeach/index";
-//    }
-//    @GetMapping(value = "/pageAdmin/index")
-//    public String getIndexAdmin() {
-//        return "pageAdmin/index";
-//    }
+    @GetMapping(value = "/logoutAdmin")
+    public String getIndexStudent() {
+        Share.token_admin = null;
+        return "redirect:/loginAdmin";
+    }
+
+    @GetMapping(value = "/logoutTeach")
+    public String getIndexTeach() {
+        Share.token_teach = null;
+        return "redirect:/loginTeach";
+    }
+
+    @GetMapping(value = "/logoutStudent")
+    public String getIndexAdmin() {
+        Share.token_student = null;
+        return "redirect:/loginStudent";
+    }
 }

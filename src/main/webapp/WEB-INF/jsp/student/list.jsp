@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=utf-8" %><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="../include/css.jsp" %>
+<%@ include file="../pageStudent/include/css.jsp" %>
 <%@ include file="../pageStudent/include/menu.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
 <div id="content">
@@ -36,9 +36,9 @@
                         </form>
                     </div>
                 </div>
-                <div class="widget-box">
+                <div class="widget-box"><%=(String) session.getAttribute(session.getId()) %>
                     <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
-                        <h5>Danh sách Giáo Viên <span ng-model="message" style="color: fuchsia;margin-left: 15px">{{message}}{{result.message}}</span></h5>
+                        <h5>Danh sách Điểm Danh  <span ng-model="message" style="color: fuchsia;margin-left: 15px">{{message}}{{result.message}}</span></h5>
                     </div>
                     <div class="widget-content nopadding">
                         <table class="table table-bordered table-striped">
@@ -88,7 +88,10 @@
                                                         $http({
                                                             method: 'POST',
                                                             url: urlBase + '/pageStudent/list',
-                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub, codeTeach: $scope.codeTeach}
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub, codeTeach: $scope.codeTeach},
+                                                            headers: {
+                                                                Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                            }
                                                         }).then(
                                                                 function Succes(res) { // success
                                                                     $scope.listData = res.data.listObject;
@@ -119,21 +122,6 @@
                                                         $scope.name = '';
                                                         $scope.status = '-1';
                                                         $scope.reloadFilter();
-                                                    };
-
-                                                    $scope.delete = function (id) {
-                                                        if (confirm("Are you sure you want to delete this?")) {
-                                                            $http({
-                                                                method: "POST",
-                                                                url: urlBase + "/pageStudent/delete",
-                                                                params: {id: id}
-                                                            }).then(function Succes(resp) {
-                                                                console.log(resp.data.messing);
-                                                                $scope.reloadFilter(resp.data.messing);
-                                                            }, function Error(resp) {
-                                                                console.log("Error: " + resp.status + " : " + resp.data);
-                                                            });
-                                                        }
                                                     };
                                                 });
 </script>

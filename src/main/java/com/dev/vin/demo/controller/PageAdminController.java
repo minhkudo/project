@@ -6,6 +6,7 @@
 package com.dev.vin.demo.controller;
 
 import com.dev.vin.demo.commons.RequestTool;
+import com.dev.vin.demo.commons.Tool;
 import com.dev.vin.demo.config.MyConfig;
 import com.dev.vin.demo.model.AngularModel;
 import com.dev.vin.demo.model.Result;
@@ -17,6 +18,7 @@ import com.dev.vin.demo.service.StudentService;
 import com.dev.vin.demo.service.SubTeachService;
 import com.dev.vin.demo.service.SubjectService;
 import com.dev.vin.demo.service.TeacherService;
+import com.dev.vin.demo.util.Share;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,12 +58,19 @@ public class PageAdminController {
 
     @GetMapping(value = "/index")
     public String getIndexAdmin() {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
         return "pageAdmin/index";
     }
 
     //Giao Vien (Teach) start
     @GetMapping(value = {"/teach", "/teach/view"})
-    public String listTeach() {
+    public String listTeach(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "teach/view";
     }
 
@@ -93,6 +102,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/teach/addRest")
     public String addRestGetTeach(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "teach/addRest";
     }
 
@@ -118,7 +131,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/teach/editRest")
     public String editRestGetTeach(Model model, @RequestParam(value = "id") int id) {
-        Teach teach = teachService.find(id);
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         model.addAttribute("id", id);
         return "teach/editRest";
     }
@@ -161,7 +177,11 @@ public class PageAdminController {
 
     //Hoc Sinh (Student) start
     @GetMapping(value = {"/student/", "/student/view"})
-    public String listStudent() {
+    public String listStudent(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "student/view";
     }
 
@@ -194,6 +214,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/student/addRest")
     public String addRestGetStudent(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "student/addRest";
     }
 
@@ -218,8 +242,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/student/editRest")
     public String editRestGetStudent(Model model, @RequestParam(value = "id") int id) {
-        Student student = studentService.find(id);
-        model.addAttribute("student", student);
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         model.addAttribute("id", id);
         return "student/editRest";
     }
@@ -256,9 +282,14 @@ public class PageAdminController {
     }
     //Hoc Sinh (Student) end
 
+    
     //Môn Học (Subject) start
     @GetMapping(value = {"/subject/", "/subject/view"})
-    public String listSubject() {
+    public String listSubject(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "subject/view";
     }
 
@@ -289,6 +320,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/subject/addRest")
     public String addRestGetSubject(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "subject/addRest";
     }
 
@@ -312,6 +347,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/subject/editRest")
     public String editRestGetSubject(Model model, @RequestParam(value = "id") int id) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         model.addAttribute("id", id);
         return "subject/editRest";
     }
@@ -350,7 +389,11 @@ public class PageAdminController {
 
     //Môn + Giáo Viên (Sub + teach) start
     @GetMapping(value = {"/subTeach/", "/subTeach/view"})
-    public String listSubTeach() {
+    public String listSubTeach(Model model) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         return "subTeach/view";
     }
 
@@ -382,6 +425,10 @@ public class PageAdminController {
 
     @GetMapping(value = "/subTeach/editRest")
     public String editRestGetSubTeach(Model model, @RequestParam(value = "id") int id) {
+        if (Tool.checkNull(Share.token_admin)) {
+            return "redirect:/loginAdmin";
+        }
+        model.addAttribute("token", Share.token_admin);
         model.addAttribute("id", id);
         return "subTeach/editRest";
     }

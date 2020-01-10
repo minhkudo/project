@@ -96,7 +96,10 @@
                                                         $http({
                                                             method: 'POST',
                                                             url: urlBase + '/pageAdmin/subject/view',
-                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name}
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name},
+                                                            headers: {
+                                                                Authorization: "${token}"
+                                                            }
                                                         }).then(
                                                                 function Succes(res) { // success
                                                                     $scope.listData = res.data.listObject;
@@ -128,7 +131,10 @@
                                                             $http({
                                                                 method: "DELETE",
                                                                 url: urlBase + "/pageAdmin/subject/delete",
-                                                                params: {id: id}
+                                                                params: {id: id},
+                                                                headers: {
+                                                                    Authorization: "${token}"
+                                                                }
                                                             }).then(function Succes(resp) {
                                                                 console.log(resp.data.messing);
                                                                 $scope.reloadFilter(resp.data.messing);

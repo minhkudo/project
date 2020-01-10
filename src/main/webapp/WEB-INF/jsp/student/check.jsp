@@ -6,7 +6,7 @@
     <div id="content-header">
         <div id="breadcrumb"><a href="<c:url value="/index"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid"><%=(String) session.getAttribute(session.getId()) %>
         <div class="row-fluid" ng-app="listStudent" ng-controller="studentController">
             <div class="span12">
                 <div class="widget-box">
@@ -55,7 +55,10 @@
                                                         $http({
                                                             method: 'POST',
                                                             url: urlBase + '/pageStudent/check',
-                                                            params: {id_sts: "${id_sts}"}
+                                                            params: {id_sts: "${id_sts}"},
+                                                            headers: {
+                                                                Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                            }
                                                         }).then(
                                                                 function Succes(res) { // success
                                                                     $scope.listData = res.data.listObject;

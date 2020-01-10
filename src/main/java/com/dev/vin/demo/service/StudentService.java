@@ -92,6 +92,7 @@ public class StudentService {
             
         } catch (Exception e) {
             System.out.println("Chưa tồn tại tài khoản");
+            e.printStackTrace();
         }
         return jwt;
     }

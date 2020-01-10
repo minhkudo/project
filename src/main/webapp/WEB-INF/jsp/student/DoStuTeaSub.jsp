@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=utf-8" %><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="../include/css.jsp" %>
+<%@page session = "true" %>
+<%@ include file="../pageStudent/include/css.jsp" %>
 <%@ include file="../pageStudent/include/menu.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
 <div id="content">
@@ -97,7 +98,10 @@
                                                         $http({
                                                             method: 'POST',
                                                             url: urlBase + '/pageStudent/DoStuTeaSub',
-                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub, codeTeach: $scope.codeTeach}
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub, codeTeach: $scope.codeTeach},
+                                                            headers: {
+                                                                Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                            }
                                                         }).then(
                                                                 function Succes(res) { // success
                                                                     $scope.listData = res.data.listObject;
@@ -130,7 +134,10 @@
                                                             $http({
                                                                 method: "POST",
                                                                 url: urlBase + "/pageStudent/registerNot",
-                                                                params: {codeSub: codeSub, codeTeach: codeTeach}
+                                                                params: {codeSub: codeSub, codeTeach: codeTeach},
+                                                                headers: {
+                                                                    Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                                }
                                                             }).then(function Succes(resp) {
                                                                 console.log(resp.data.messing);
                                                                 $scope.reloadFilter(resp.data.messing);

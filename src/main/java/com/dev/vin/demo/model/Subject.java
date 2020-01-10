@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -24,9 +26,13 @@ public class Subject {
     @Column(name = "ID", length = 11, nullable = false)
     private int id;
 
+    @NotNull(message = "Code is required")
+    @NotEmpty(message = "Code is required")
     @Column(name = "CODE", length = 255)
     private String code;
 
+    @NotNull(message = "Name is required")
+    @NotEmpty(message = "Name is required")
     @Column(name = "NAME", length = 255)
     private String name;
 

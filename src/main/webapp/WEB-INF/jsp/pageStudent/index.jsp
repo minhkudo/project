@@ -1,4 +1,5 @@
 <%@page contentType="text/html; charset=utf-8" %><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page session="true" %>
 <%@ include file="include/css.jsp" %>
 <%@ include file="include/menu.jsp" %>
 <div id="content">
@@ -6,6 +7,10 @@
         <div id="breadcrumb"><a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Charts &amp; graphs</a></div>
         <h1>Charts &amp; graphs <span style="color: red">${result.message}</span></h1>
     </div>
+    <%
+        String a = (String) session.getAttribute(session.getId());
+        System.out.println("a: "+a);
+    %>
     <div class="container-fluid">
         <div class="widget-box widget-plain">
             <div class="center">

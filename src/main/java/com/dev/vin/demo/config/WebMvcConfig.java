@@ -74,11 +74,15 @@ public class WebMvcConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 //
 ////        // Các trang không yêu cầu login
-        http.authorizeRequests().antMatchers("/loginTeach", "/loginAdmin", "/loginStudent", "/logout").permitAll()
+        http.authorizeRequests().antMatchers("/loginTeach", "/loginAdmin", "/loginStudent").permitAll()
+                .antMatchers("/logoutTeach", "/logoutAdmin", "/logoutStudent").permitAll()
                 .antMatchers(HttpMethod.POST, "/loginTeach", "/loginAdmin", "/loginStudent").permitAll()
-                .antMatchers("/pageAdmin/*").hasRole("ADMIN")
-                .antMatchers("/pageTeach/*").hasRole("USER")
-                .antMatchers("/pageStudent/*").hasRole("MEMBER")
+                .antMatchers(HttpMethod.GET,"/pageAdmin/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/pageTeach/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/pageStudent/**").permitAll()
+                .antMatchers("/pageAdmin/**").hasRole("ADMIN")
+                .antMatchers("/pageTeach/**").hasRole("USER")
+                .antMatchers("/pageStudent/**").hasRole("MEMBER")
                 .anyRequest().authenticated() // Các request còn lại đều cần được authenticated
                 .and()
                 .exceptionHandling()
@@ -131,10 +135,10 @@ public class WebMvcConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
                 "/swagger-resources/**",
                 "/swagger-ui.html",
-                "/css/*",
-                "/img/*",
-                "/images/*",
-                "/js/*"
+                "/css/**",
+                "/img/**",
+                "/images/**",
+                "/js/**"
         );
     }
 }

@@ -81,7 +81,10 @@
                                                     $http({
                                                         method: "POST",
                                                         url: "/pageAdmin/teach/editRest",
-                                                        params: {id: ${id}}
+                                                        params: {id: ${id}},
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 console.log(resp.data);
@@ -117,7 +120,7 @@
                                                         url: "/pageAdmin/teach/editRest",
                                                         data: angular.toJson($scope.teachForm),
                                                         headers: {
-                                                            'Content-Type': 'application/json'
+                                                            Authorization: "${token}"
                                                         }
                                                     }).then(
                                                             function Succes(resp) {

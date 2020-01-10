@@ -90,7 +90,10 @@
                                                     $http({
                                                         method: "POST",
                                                         url: "/pageAdmin/teach/addRest",
-                                                        data: angular.toJson($scope.teachForm)
+                                                        data: angular.toJson($scope.teachForm),
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 $scope.message = resp.data.message;

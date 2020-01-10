@@ -89,7 +89,10 @@
                                                     $http({
                                                         method: "POST",
                                                         url: "/pageAdmin/student/addRest",
-                                                        data: $scope.studentForm
+                                                        data: $scope.studentForm,
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 $scope.message = resp.data.message;

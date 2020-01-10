@@ -100,54 +100,60 @@
 <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
-var app = angular.module('listTeach', []);
-app.controller('teachController', function ($scope, $http, $filter) {
-    $scope.reloadFilter = function (str) {
-        $http({
-            method: 'POST',
-            url: urlBase + '/pageAdmin/teach/view',
-            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name, status: $scope.status}
-        }).then(
-                function Succes(res) { // success
-                    $scope.listData = res.data.listObject;
-                    $scope.totalRow = res.data.totalRow;
-                    $scope.message = str;
-                    $scope.result = res.data.result;
-                    console.log($scope.result.message);
-                    if (!angular.isUndefined(str) && str !== '') {
-                        $scope.result.message = str;
-                    }
-                },
-                function Error(res) { // error
-                    console.log("Error: " + res.status + " : " + res.data);
-                }
-        );
-    };
+                                                var app = angular.module('listTeach', []);
+                                                app.controller('teachController', function ($scope, $http, $filter) {
+                                                    $scope.reloadFilter = function (str) {
+                                                        $http({
+                                                            method: 'POST',
+                                                            url: urlBase + '/pageAdmin/teach/view',
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name, status: $scope.status},
+                                                            headers: {
+                                                                Authorization: "${token}"
+                                                            }
+                                                        }).then(
+                                                                function Succes(res) { // success
+                                                                    $scope.listData = res.data.listObject;
+                                                                    $scope.totalRow = res.data.totalRow;
+                                                                    $scope.message = str;
+                                                                    $scope.result = res.data.result;
+                                                                    console.log($scope.result.message);
+                                                                    if (!angular.isUndefined(str) && str !== '') {
+                                                                        $scope.result.message = str;
+                                                                    }
+                                                                },
+                                                                function Error(res) { // error
+                                                                    console.log("Error: " + res.status + " : " + res.data);
+                                                                }
+                                                        );
+                                                    };
 
-    $scope.$watch('crPage + crPage', function () {
-        $scope.reloadFilter();
-    });
-    
-    $scope.reset = function () {
-        $scope.name = '';
-        $scope.code = '';
-        $scope.status = '-1';
-        $scope.reloadFilter();
-    };
+                                                    $scope.$watch('crPage + crPage', function () {
+                                                        $scope.reloadFilter();
+                                                    });
 
-    $scope.delete = function (id) {
-        if (confirm("Are you sure you want to delete this?")) {
-            $http({
-                method: "DELETE",
-                url: urlBase + "/pageAdmin/teach/delete",
-                params: {id: id}
-            }).then(function Succes(resp) {
-                console.log(resp.data.messing);
-                $scope.reloadFilter(resp.data.messing);
-            }, function Error(response) {
-                console.log("Error: " + res.status + " : " + res.data);
-            });
-        }
-    };
-});
+                                                    $scope.reset = function () {
+                                                        $scope.name = '';
+                                                        $scope.code = '';
+                                                        $scope.status = '-1';
+                                                        $scope.reloadFilter();
+                                                    };
+
+                                                    $scope.delete = function (id) {
+                                                        if (confirm("Are you sure you want to delete this?")) {
+                                                            $http({
+                                                                method: "DELETE",
+                                                                url: urlBase + "/pageAdmin/teach/delete",
+                                                                params: {id: id},
+                                                                headers: {
+                                                                    Authorization: "${token}"
+                                                                }
+                                                            }).then(function Succes(resp) {
+                                                                console.log(resp.data.messing);
+                                                                $scope.reloadFilter(resp.data.messing);
+                                                            }, function Error(response) {
+                                                                console.log("Error: " + res.status + " : " + res.data);
+                                                            });
+                                                        }
+                                                    };
+                                                });
 </script>

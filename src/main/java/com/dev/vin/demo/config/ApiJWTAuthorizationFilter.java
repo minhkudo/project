@@ -39,7 +39,7 @@ public class ApiJWTAuthorizationFilter extends BasicAuthenticationFilter {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         if (roles != null) {
             for (String role : roles) {
-                GrantedAuthority authority = new SimpleGrantedAuthority(role);
+                GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
                 authorities.add(authority);
             }
         }

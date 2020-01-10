@@ -55,7 +55,10 @@
                                                     $http({
                                                         method: 'POST',
                                                         url: urlBase + '/pageTeach/check',
-                                                        params: {codeSub: "${codeSub}", codeTeach: "ad"}
+                                                        params: {codeSub: "${codeSub}"},
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(res) { // success
                                                                 $scope.listData = res.data.listObject;
@@ -90,7 +93,10 @@
                                                     $http({
                                                         method: "PUT",
                                                         url: "/pageTeach/check",
-                                                        data: str
+                                                        data: str,
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 console.log(resp.data);
@@ -100,8 +106,7 @@
                                                                 {
                                                                     $scope.message = "Điểm Danh Thành Công";
                                                                     window.location = urlBase + '/pageTeach/list';
-                                                                }
-                                                                else
+                                                                } else
                                                                 {
                                                                     $scope.message = "Điểm Danh Thất Bại";
                                                                 }

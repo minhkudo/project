@@ -21,11 +21,11 @@ public class SubTeachService {
     @Autowired
     private SubTeachDao subTeachDao;
 
-    public ArrayList<Sub_teach> list(int page, int row,  String codeSub, String codeTeach) {
+    public ArrayList<Sub_teach> list(int page, int row, String codeSub, String codeTeach) {
         return subTeachDao.list(page, row, codeSub, codeTeach);
     }
 
-    public int count( String codeSub, String codeTeach) {
+    public int count(String codeSub, String codeTeach) {
         return subTeachDao.count(codeSub, codeTeach);
     }
 
@@ -45,13 +45,12 @@ public class SubTeachService {
         return subTeachDao.delete(id);
     }
 
-    public ArrayList<Sub_teach> listNotReig(int page, int row,  String codeSub, String codeTeach) {
-        return subTeachDao.listNotReig(page, row, codeSub, codeTeach);
+    public ArrayList<Sub_teach> listNotReig(int page, int row, String codeSub, String codeTeach, String codeStudent) {
+        return subTeachDao.listNotReig(page, row, codeSub, codeTeach, codeStudent);
     }
-    
-    public ArrayList<Sub_teach> listDoReig(int page, int row,  String codeSub, String codeTeach) {
-        return subTeachDao.listDoReig(page, row, codeSub, codeTeach);
+
+    public ArrayList<Sub_teach> listDoReig(int page, int row, String codeSub, String codeTeach, String codeStudent) {
+        return subTeachDao.listDoReig(page, row, codeSub, codeTeach, codeStudent);
     }
-    
-    
+
 }

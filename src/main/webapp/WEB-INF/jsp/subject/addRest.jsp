@@ -72,7 +72,10 @@
                                             $http({
                                                 method: "POST",
                                                 url: "/pageAdmin/subject/addRest",
-                                                data: angular.toJson($scope.subjectForm)
+                                                data: angular.toJson($scope.subjectForm),
+                                                headers: {
+                                                    Authorization: "${token}"
+                                                }
                                             }).then(
                                                     function Succes(resp) {
                                                         $scope.message = resp.data.message;

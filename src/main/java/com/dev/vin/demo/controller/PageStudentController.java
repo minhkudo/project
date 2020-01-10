@@ -6,21 +6,28 @@
 package com.dev.vin.demo.controller;
 
 import com.dev.vin.demo.commons.RequestTool;
+import com.dev.vin.demo.commons.Tool;
 import com.dev.vin.demo.config.MyConfig;
 import com.dev.vin.demo.model.AngularModel;
 import com.dev.vin.demo.model.Check;
 import com.dev.vin.demo.model.Result;
 import com.dev.vin.demo.model.Sub_teach;
 import com.dev.vin.demo.model.Sub_teach_student;
-import com.dev.vin.demo.model.Teach;
 import com.dev.vin.demo.service.CheckService;
 import com.dev.vin.demo.service.SubTeachService;
 import com.dev.vin.demo.service.SubTeachStudentService;
+import com.dev.vin.demo.util.Share;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,12 +54,19 @@ public class PageStudentController {
     private CheckService checkService;
 
     @GetMapping(value = "/index")
-    public String getIndexStudent() {
+    public String getIndexStudent(Model model, HttpSession session) {
+        if (!Share.checkSessionStudent(session.getId())) {
+            return "redirect:/loginStudent";
+        }
+        
         return "pageStudent/index";
     }
 
     @GetMapping(value = "/DoStuTeaSub")
-    public String getReigStudent(Model model) {
+    public String getReigStudent(Model model, HttpSession session) {
+        if (!Share.checkSessionStudent(session.getId())) {
+            return "redirect:/loginStudent";
+        }
         return "student/DoStuTeaSub";
     }
 
@@ -68,7 +82,16 @@ public class PageStudentController {
         System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach> sub_teach = subTeachSerivce.listDoReig(crPage, maxRow, codeSub, codeTeach);
+        // Ví dụ lấy thông tin người thực hiện tác vụ createUser từ trong SecurityContext
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeStudent = (String) auth.getPrincipal();
+        // Để lấy ra các thông tin khác vd như userId thì yêu cầu phải lưu trong thông tin vào object
+        // và object được lưu trong Credentials. Gọi hàm getCredentials() để lấy ra object rồi tiếp tục lấy ra các property khác
+        // auth.getCredentials()
+        // Đây là lấy ra username là email
+        System.out.println("codeStudent: " + codeStudent);
+        ArrayList<Sub_teach> sub_teach = subTeachSerivce.listDoReig(crPage, maxRow, codeSub, codeTeach, codeStudent);
         int count = sub_teach.size();
         System.out.println("count: " + count);
         AngularModel<Sub_teach> ngModel = new AngularModel<>();
@@ -88,8 +111,14 @@ public class PageStudentController {
             @RequestParam(value = "codeTeach") String codeTeach) {
         System.out.println("codeSub: " + codeSub);
         System.out.println("codeTeach: " + codeTeach);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeStudent = (String) auth.getPrincipal();
+        System.out.println("codeStudent: " + codeStudent);
+
         Sub_teach_student sts = new Sub_teach_student();
-        sts.setCode_student("ad");
+        sts.setCode_student(codeStudent);
         sts.setCode_sub(codeSub);
         sts.setCode_teach(codeTeach);
         if (subTeachStudentSerivce.add(sts)) {
@@ -103,7 +132,10 @@ public class PageStudentController {
     }
 
     @GetMapping(value = "/NotStuTeaSub")
-    public String getNotReigStudent(Model model) {
+    public String getNotReigStudent(Model model, HttpSession session) {
+        if (!Share.checkSessionStudent(session.getId())) {
+            return "redirect:/loginStudent";
+        }
         return "student/NotStuTeaSub";
     }
 
@@ -119,7 +151,12 @@ public class PageStudentController {
         System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach> sub_teach = subTeachSerivce.listNotReig(crPage, maxRow, codeSub, codeTeach);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeStudent = (String) auth.getPrincipal();
+        System.out.println("codeStudent: " + codeStudent);
+
+        ArrayList<Sub_teach> sub_teach = subTeachSerivce.listNotReig(crPage, maxRow, codeSub, codeTeach, codeStudent);
         int count = sub_teach.size();
         System.out.println("count: " + count);
         AngularModel<Sub_teach> ngModel = new AngularModel<>();
@@ -139,7 +176,13 @@ public class PageStudentController {
             @RequestParam(value = "codeTeach") String codeTeach) {
         System.out.println("codeSub: " + codeSub);
         System.out.println("codeTeach: " + codeTeach);
-        if (subTeachStudentSerivce.delete(codeSub, codeTeach, "ad")) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeStudent = (String) auth.getPrincipal();
+        System.out.println("codeStudent: " + codeStudent);
+
+        if (subTeachStudentSerivce.delete(codeSub, codeTeach, codeStudent)) {
             model.addAttribute("messing", "Hủy Mon Học Thành Công");
             return new ResponseEntity<>(model, HttpStatus.OK);
 
@@ -150,7 +193,10 @@ public class PageStudentController {
     }
 
     @GetMapping(value = "/list")
-    public String getListStudent(Model model) {
+    public String getListStudent(Model model, HttpSession session) {
+        if (!Share.checkSessionStudent(session.getId())) {
+            return "redirect:/loginStudent";
+        }
         return "student/list";
     }
 
@@ -165,7 +211,13 @@ public class PageStudentController {
         System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach_student> subTeach = subTeachStudentSerivce.list(crPage, maxRow, codeSub, codeTeach, "ad");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeStudent = (String) auth.getPrincipal();
+        System.out.println("codeStudent: " + codeStudent);
+
+        ArrayList<Sub_teach_student> subTeach = subTeachStudentSerivce.list(crPage, maxRow, codeSub, codeTeach, codeStudent);
         int count = subTeach.size();
         System.out.println("count: " + count);
         AngularModel<Sub_teach_student> ngModel = new AngularModel<>();
@@ -181,7 +233,11 @@ public class PageStudentController {
 
     @GetMapping(value = "/check")
     public String getCheck(Model model, @RequestParam(value = "id_sts") int id_sts) {
+        if (Tool.checkNull(Share.token_student)) {
+            return "redirect:/loginStudent";
+        }
         model.addAttribute("id_sts", id_sts);
+        model.addAttribute("token", Share.token_student);
         System.out.println("id_sts: " + id_sts);
         return "student/check";
     }

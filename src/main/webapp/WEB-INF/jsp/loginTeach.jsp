@@ -68,7 +68,7 @@
                     }).then(
                             function Succes(resp) {
                                 console.log(resp.data);
-                                if (resp.data === true)
+                                if (resp.data.code === 1)
                                 {
                                     $scope.message = "Đăng Nhập Thành Công";
                                     window.location = urlBase + '/pageTeach/index';

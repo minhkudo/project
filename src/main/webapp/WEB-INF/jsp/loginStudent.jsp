@@ -71,8 +71,6 @@
                                 console.log(resp.data);
                                 if (resp.data.code === 1)
                                 {
-                                    var token = resp.data.message;
-                                    $http.defaults.headers.common['Authorization'] = token;
                                     $scope.message = "Đăng Nhập Thành Công";
                                     window.location = urlBase + '/pageStudent/index';
                                 } else {

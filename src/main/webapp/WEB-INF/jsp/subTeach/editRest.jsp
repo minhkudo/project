@@ -73,7 +73,10 @@
                                                     $http({
                                                         method: "PUT",
                                                         url: "/pageAdmin/subTeach/editRest",
-                                                        params: {id: ${id}}
+                                                        params: {id: ${id}},
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 console.log(resp.data);
@@ -88,7 +91,10 @@
                                                     $http({
                                                         method: "POST",
                                                         url: "/pageAdmin/teach/",
-                                                        params: {crPage: 1, maxRow: 100, code: '', name: '', status: '1'}
+                                                        params: {crPage: 1, maxRow: 100, code: '', name: '', status: '1'},
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 console.log(resp.data);
@@ -107,7 +113,10 @@
                                                     $http({
                                                         method: "PUT",
                                                         url: "/pageAdmin/subTeach/editRest",
-                                                        params: {id: ${id}}
+                                                        params: {id: ${id}},
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 console.log(resp.data);
@@ -123,7 +132,10 @@
                                                     $http({
                                                         method: "POST",
                                                         url: "/pageAdmin/subTeach/editRest",
-                                                        data: angular.toJson($scope.subTeachForm)
+                                                        data: angular.toJson($scope.subTeachForm),
+                                                        headers: {
+                                                            Authorization: "${token}"
+                                                        }
                                                     }).then(
                                                             function Succes(resp) {
                                                                 $scope.message = resp.data.message;

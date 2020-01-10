@@ -113,7 +113,10 @@
                                                         $http({
                                                             method: 'POST',
                                                             url: urlBase + '/pageAdmin/student/view',
-                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name, status: $scope.status}
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name, status: $scope.status},
+                                                            headers: {
+                                                                Authorization: "${token}"
+                                                            }
                                                         }).then(
                                                                 function Succes(res) { // success
                                                                     $scope.listData = res.data.listObject;
@@ -151,7 +154,10 @@
                                                             $http({
                                                                 method: "DELETE",
                                                                 url: urlBase + "/pageAdmin/student/delete",
-                                                                params: {id: id}
+                                                                params: {id: id},
+                                                                headers: {
+                                                                    Authorization: "${token}"
+                                                                }
                                                             }).then(function Succes(resp) {
                                                                 console.log(resp.data.messing);
                                                                 $scope.reloadFilter(resp.data.messing);

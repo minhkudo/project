@@ -18,7 +18,7 @@
                             <div class="control-group">
                                 <label class="control-label">Mã Môn Học</label>
                                 <div class="controls">
-                                    <input class="text-input" ng-model="name" type="text">
+                                    <input class="text-input" ng-model="codeSub" type="text">
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                             </div>
@@ -27,8 +27,8 @@
                                     <div  ng-click="reloadFilter()" class="btn btn-success">Tìm kiếm</div>
                                     &nbsp;&nbsp;&nbsp;
                                     <input type="reset" ng-click="reset()" class="btn btn-warning" name="Reset Form" value="reset"/>
-<!--                                    &nbsp;&nbsp;&nbsp;
-                                    <input class="btn btn-primary" onclick="location.href = '<c:url value="/teach/addRest" />'" value="Thêm mới" type="button">-->
+                                    <!--                                    &nbsp;&nbsp;&nbsp;
+                                                                        <input class="btn btn-primary" onclick="location.href = '<c:url value="/teach/addRest" />'" value="Thêm mới" type="button">-->
                                 </div>
                             </div>
                         </form>
@@ -78,39 +78,42 @@
 <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
-var app = angular.module('listTeach', []);
-app.controller('teachController', function ($scope, $http, $filter) {
-    $scope.reloadFilter = function (str) {
-        $http({
-            method: 'POST',
-            url: urlBase + '/pageTeach/list',
-            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, code: $scope.code, name: $scope.name, status: $scope.status}
-        }).then(
-                function Succes(res) { // success
-                    $scope.listData = res.data.listObject;
-                    $scope.totalRow = res.data.totalRow;
-                    $scope.message = str;
-                    $scope.result = res.data.result;
-                    console.log($scope.result.message);
-                    if (!angular.isUndefined(str) && str !== '') {
-                        $scope.result.message = str;
-                    }
-                },
-                function Error(res) { // error
-                    console.log("Error: " + res.status + " : " + res.data);
-                }
-        );
-    };
+                                                var app = angular.module('listTeach', []);
+                                                app.controller('teachController', function ($scope, $http, $filter) {
+                                                    $scope.reloadFilter = function (str) {
+                                                        $http({
+                                                            method: 'POST',
+                                                            url: urlBase + '/pageTeach/list',
+                                                            params: {crPage: $scope.crPage, maxRow: $scope.maxRow, codeSub: $scope.codeSub},
+                                                            headers: {
+                                                                Authorization: "${token}"
+                                                            }
+                                                        }).then(
+                                                                function Succes(res) { // success
+                                                                    $scope.listData = res.data.listObject;
+                                                                    $scope.totalRow = res.data.totalRow;
+                                                                    $scope.message = str;
+                                                                    $scope.result = res.data.result;
+                                                                    console.log($scope.result.message);
+                                                                    if (!angular.isUndefined(str) && str !== '') {
+                                                                        $scope.result.message = str;
+                                                                    }
+                                                                },
+                                                                function Error(res) { // error
+                                                                    console.log("Error: " + res.status + " : " + res.data);
+                                                                }
+                                                        );
+                                                    };
 
-    $scope.$watch('crPage + crPage', function () {
-        $scope.reloadFilter();
-    });
-    
-    $scope.reset = function () {
-        $scope.codeSub = '';
-        $scope.codeTeach = '';
-        $scope.reloadFilter();
-    };
+                                                    $scope.$watch('crPage + crPage', function () {
+                                                        $scope.reloadFilter();
+                                                    });
+
+                                                    $scope.reset = function () {
+                                                        $scope.codeSub = '';
+                                                        $scope.codeTeach = '';
+                                                        $scope.reloadFilter();
+                                                    };
 
 //    $scope.delete = function (id) {
 //        if (confirm("Are you sure you want to delete this?")) {
@@ -126,5 +129,5 @@ app.controller('teachController', function ($scope, $http, $filter) {
 //            });
 //        }
 //    };
-});
+                                                });
 </script>

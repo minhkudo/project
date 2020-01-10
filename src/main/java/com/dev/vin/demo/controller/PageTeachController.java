@@ -6,6 +6,7 @@
 package com.dev.vin.demo.controller;
 
 import com.dev.vin.demo.commons.RequestTool;
+import com.dev.vin.demo.commons.Tool;
 import com.dev.vin.demo.config.MyConfig;
 import com.dev.vin.demo.model.AngularModel;
 import com.dev.vin.demo.model.Check;
@@ -13,16 +14,17 @@ import com.dev.vin.demo.model.RequestJsonClient;
 import com.dev.vin.demo.model.Result;
 import com.dev.vin.demo.model.Sub_teach;
 import com.dev.vin.demo.model.Sub_teach_student;
-import com.dev.vin.demo.model.Teach;
 import com.dev.vin.demo.service.CheckService;
 import com.dev.vin.demo.service.SubTeachService;
 import com.dev.vin.demo.service.SubTeachStudentService;
-import com.dev.vin.demo.service.TeacherService;
+import com.dev.vin.demo.util.Share;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,11 +54,18 @@ public class PageTeachController {
 
     @GetMapping(value = "/index")
     public String getIndexTeach() {
+        if (Tool.checkNull(Share.token_teach)) {
+            return "redirect:/loginTeach";
+        }
         return "pageTeach/index";
     }
 
     @GetMapping(value = {"/list"})
-    public String list() {
+    public String list(Model model) {
+        if (Tool.checkNull(Share.token_teach)) {
+            return "redirect:/loginTeach";
+        }
+        model.addAttribute("token", Share.token_teach);
         return "teach/list";
     }
 
@@ -64,14 +73,16 @@ public class PageTeachController {
     @ResponseBody
     public ResponseEntity<AngularModel<Sub_teach>> listSubjectTeach(Model model, HttpServletRequest request) {
         String codeSub = RequestTool.getString(request, "codeSub");
-        String codeTeach = RequestTool.getString(request, "codeTeach");
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
         System.out.println("codeSub: " + codeSub);
-        System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach> subTeach = subTeachSerivce.list(crPage, maxRow, codeSub, "ad");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeTeach = (String) auth.getPrincipal();
+        System.out.println("codeTeach: " + codeTeach);
+        ArrayList<Sub_teach> subTeach = subTeachSerivce.list(crPage, maxRow, codeSub, codeTeach);
         int count = subTeach.size();
         System.out.println("count: " + count);
         AngularModel<Sub_teach> ngModel = new AngularModel<>();
@@ -89,6 +100,10 @@ public class PageTeachController {
     public String getCheck(Model model, @RequestParam(value = "codeSub") String codeSub) {
         model.addAttribute("codeSub", codeSub);
         System.out.println("codeSub: " + codeSub);
+        if (Tool.checkNull(Share.token_teach)) {
+            return "redirect:/loginTeach";
+        }
+        model.addAttribute("token", Share.token_teach);
         return "teach/check";
     }
 
@@ -96,14 +111,16 @@ public class PageTeachController {
     @ResponseBody
     public ResponseEntity<AngularModel<Sub_teach_student>> postCheck(Model model, HttpServletRequest request) {
         String codeSub = RequestTool.getString(request, "codeSub");
-        String codeTeach = RequestTool.getString(request, "codeTeach");
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
         System.out.println("codeSub: " + codeSub);
-        System.out.println("codeTeach: " + codeTeach);
         System.out.println("maxRow: " + maxRow);
         System.out.println("crPage: " + crPage);
-        ArrayList<Sub_teach_student> subTeachStu = subTeachStudentSerivce.list(crPage, maxRow, codeSub, "ad", null);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Đây là lấy ra username là email
+        String codeTeach = (String) auth.getPrincipal();
+        System.out.println("codeTeach: " + codeTeach);
+        ArrayList<Sub_teach_student> subTeachStu = subTeachStudentSerivce.list(crPage, maxRow, codeSub, codeTeach, null);
         int count = subTeachStu.size();
         System.out.println("count: " + count);
         AngularModel<Sub_teach_student> ngModel = new AngularModel<>();

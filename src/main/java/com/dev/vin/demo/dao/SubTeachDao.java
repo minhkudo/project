@@ -150,13 +150,13 @@ public class SubTeachDao {
         }
         return rs;
     }
-    
-    public ArrayList<Sub_teach> listNotReig(int page, int row, String codeSub, String codeTeach) {
+
+    public ArrayList<Sub_teach> listNotReig(int page, int row, String codeSub, String codeTeach, String codeStudent) {
         ArrayList<Sub_teach> list = new ArrayList<>();
-        String sql = "SELECT * FROM map_sub_teach \n" +
-                        "WHERE CODE_TEACH IS NOT NULL \n" +
-                        "AND CODE_SUB NOT IN (SELECT CODE_SUB FROM sub_teach_student WHERE CODE_STUDENT = \"ad\") \n" +
-                        "AND CODE_TEACH NOT IN (SELECT CODE_TEACH FROM sub_teach_student WHERE CODE_STUDENT = \"ad\") ";
+        String sql = "SELECT * FROM map_sub_teach \n"
+                + "WHERE CODE_TEACH IS NOT NULL \n"
+                + "AND CODE_SUB NOT IN (SELECT CODE_SUB FROM sub_teach_student WHERE CODE_STUDENT = ?) \n"
+                + "AND CODE_TEACH NOT IN (SELECT CODE_TEACH FROM sub_teach_student WHERE CODE_STUDENT = ?) ";
         if (!Tool.checkNull(codeSub)) {
             sql += " AND CODE_SUB like ? ";
         }
@@ -168,6 +168,8 @@ public class SubTeachDao {
         try {
             Query query = entityManager.createNativeQuery(sql, Sub_teach.class);
             int i = 1;
+            query.setParameter(i++, codeStudent);
+            query.setParameter(i++, codeStudent);
             if (!Tool.checkNull(codeSub)) {
                 query.setParameter(i++, "%" + codeSub + "%");
             }
@@ -182,13 +184,13 @@ public class SubTeachDao {
         }
         return list;
     }
-    
-    public ArrayList<Sub_teach> listDoReig(int page, int row, String codeSub, String codeTeach) {
+
+    public ArrayList<Sub_teach> listDoReig(int page, int row, String codeSub, String codeTeach, String codeStudent) {
         ArrayList<Sub_teach> list = new ArrayList<>();
-        String sql = "SELECT * FROM map_sub_teach \n" +
-                        "WHERE CODE_TEACH IS NOT NULL \n" +
-                        "AND CODE_SUB IN (SELECT CODE_SUB FROM sub_teach_student WHERE CODE_STUDENT = \"ad\") \n" +
-                        "OR CODE_TEACH IN (SELECT CODE_TEACH FROM sub_teach_student WHERE CODE_STUDENT = \"ad\") ";
+        String sql = "SELECT * FROM map_sub_teach \n"
+                + "WHERE CODE_TEACH IS NOT NULL \n"
+                + "AND CODE_SUB IN (SELECT CODE_SUB FROM sub_teach_student WHERE CODE_STUDENT = ?) \n"
+                + "OR CODE_TEACH IN (SELECT CODE_TEACH FROM sub_teach_student WHERE CODE_STUDENT = ?) ";
         if (!Tool.checkNull(codeSub)) {
             sql += " AND CODE_SUB like ? ";
         }
@@ -200,6 +202,8 @@ public class SubTeachDao {
         try {
             Query query = entityManager.createNativeQuery(sql, Sub_teach.class);
             int i = 1;
+            query.setParameter(i++, codeStudent);
+            query.setParameter(i++, codeStudent);
             if (!Tool.checkNull(codeSub)) {
                 query.setParameter(i++, "%" + codeSub + "%");
             }
@@ -214,5 +218,5 @@ public class SubTeachDao {
         }
         return list;
     }
-    
+
 }
