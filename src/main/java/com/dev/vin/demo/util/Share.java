@@ -23,22 +23,28 @@ public class Share {
 
     public static boolean checkSessionStudent(String session) {
         for (String string : listSessionStudent) {
-            if (string.equals(session));
-            return true;
+            System.out.println("String: " + string);
+            if (string.equals(session)) {
+                return true;
+            }
         }
         return false;
     }
+
     public static boolean checkSessionTeach(String session) {
         for (String string : listSessionTeach) {
-            if (string.equals(session));
-            return true;
+            if (string.equals(session)) {
+                return true;
+            }
         }
         return false;
     }
+
     public static boolean checkSessionAdmin(String session) {
         for (String string : listSessionAdmin) {
-            if (string.equals(session));
-            return true;
+            if (string.equals(session)) {
+                return true;
+            }
         }
         return false;
     }

@@ -75,6 +75,7 @@
                                     window.location = urlBase + '/pageStudent/index';
                                 } else {
                                     $scope.message = "Đăng Nhập Thất Bại";
+                                    window.location = urlBase + '/loginStudent';
                                 }
                             }, function Error(resp) {
                         console.log("Error: " + resp.status + " : " + resp.data);

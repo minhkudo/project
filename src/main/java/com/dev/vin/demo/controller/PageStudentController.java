@@ -54,19 +54,24 @@ public class PageStudentController {
     private CheckService checkService;
 
     @GetMapping(value = "/index")
-    public String getIndexStudent(Model model, HttpSession session) {
+    public String getIndexStudent(Model model, HttpSession session, HttpServletRequest request) {
+        System.out.println("session: " + session.getId());
+        System.out.println("check: " + Share.checkSessionStudent(session.getId()));
         if (!Share.checkSessionStudent(session.getId())) {
             return "redirect:/loginStudent";
         }
-        
+        model.addAttribute("token", request.getSession().getAttribute(session.getId()));
         return "pageStudent/index";
     }
 
     @GetMapping(value = "/DoStuTeaSub")
-    public String getReigStudent(Model model, HttpSession session) {
+    public String getReigStudent(Model model, HttpSession session, HttpServletRequest request) {
+        System.out.println("session: " + session.getId());
+        System.out.println("check: " + Share.checkSessionStudent(session.getId()));
         if (!Share.checkSessionStudent(session.getId())) {
             return "redirect:/loginStudent";
         }
+        model.addAttribute("token", request.getSession().getAttribute(session.getId()));
         return "student/DoStuTeaSub";
     }
 
@@ -78,10 +83,10 @@ public class PageStudentController {
         int status = RequestTool.getInt(request, "status", -1);
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
-        System.out.println("codeSub: " + codeSub);
-        System.out.println("codeTeach: " + codeTeach);
-        System.out.println("maxRow: " + maxRow);
-        System.out.println("crPage: " + crPage);
+//        System.out.println("codeSub: " + codeSub);
+//        System.out.println("codeTeach: " + codeTeach);
+//        System.out.println("maxRow: " + maxRow);
+//        System.out.println("crPage: " + crPage);
         // Ví dụ lấy thông tin người thực hiện tác vụ createUser từ trong SecurityContext
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // Đây là lấy ra username là email
@@ -132,10 +137,13 @@ public class PageStudentController {
     }
 
     @GetMapping(value = "/NotStuTeaSub")
-    public String getNotReigStudent(Model model, HttpSession session) {
+    public String getNotReigStudent(Model model, HttpSession session, HttpServletRequest request) {
+        System.out.println("session: " + session.getId());
+        System.out.println("check: " + Share.checkSessionStudent(session.getId()));
         if (!Share.checkSessionStudent(session.getId())) {
             return "redirect:/loginStudent";
         }
+        model.addAttribute("token", request.getSession().getAttribute(session.getId()));
         return "student/NotStuTeaSub";
     }
 
@@ -147,10 +155,10 @@ public class PageStudentController {
         int status = RequestTool.getInt(request, "status", -1);
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
-        System.out.println("codeSub: " + codeSub);
-        System.out.println("codeTeach: " + codeTeach);
-        System.out.println("maxRow: " + maxRow);
-        System.out.println("crPage: " + crPage);
+//        System.out.println("codeSub: " + codeSub);
+//        System.out.println("codeTeach: " + codeTeach);
+//        System.out.println("maxRow: " + maxRow);
+//        System.out.println("crPage: " + crPage);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // Đây là lấy ra username là email
         String codeStudent = (String) auth.getPrincipal();
@@ -193,10 +201,11 @@ public class PageStudentController {
     }
 
     @GetMapping(value = "/list")
-    public String getListStudent(Model model, HttpSession session) {
+    public String getListStudent(Model model, HttpSession session, HttpServletRequest request) {
         if (!Share.checkSessionStudent(session.getId())) {
             return "redirect:/loginStudent";
         }
+        model.addAttribute("token", request.getSession().getAttribute(session.getId()));
         return "student/list";
     }
 
@@ -207,10 +216,10 @@ public class PageStudentController {
         String codeTeach = RequestTool.getString(request, "codeTeach");
         int maxRow = RequestTool.getInt(request, "maxRow", MyConfig.ADMIN_MAX_ROW);
         int crPage = RequestTool.getInt(request, "crPage", 1);
-        System.out.println("codeSub: " + codeSub);
-        System.out.println("codeTeach: " + codeTeach);
-        System.out.println("maxRow: " + maxRow);
-        System.out.println("crPage: " + crPage);
+//        System.out.println("codeSub: " + codeSub);
+//        System.out.println("codeTeach: " + codeTeach);
+//        System.out.println("maxRow: " + maxRow);
+//        System.out.println("crPage: " + crPage);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // Đây là lấy ra username là email

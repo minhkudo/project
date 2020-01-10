@@ -11,7 +11,9 @@ import com.dev.vin.demo.service.StudentService;
 import com.dev.vin.demo.service.TeacherService;
 import com.dev.vin.demo.util.JwtUltis;
 import com.dev.vin.demo.util.Share;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,14 +50,18 @@ public class LoginController {
     public ResponseEntity<Result> loginStudent(Model model,
             @RequestParam(value = "code", required = true) String code,
             @RequestParam(value = "password", required = true) String password,
-            HttpServletRequest request) {
+            HttpServletRequest request,HttpServletResponse response) {
         System.out.println("code: " + code);
         System.out.println("password: " + password);
         String token = studentService.login(code, password);
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession(false);
         Share.listSessionStudent.add(session.getId());
         System.out.println("id: " + session.getId());
         session.setAttribute(session.getId(), token);
+
+        Cookie cookie = new Cookie("JSESSIONID", request.getSession().getId());
+        response.addCookie(cookie);
+
         if (Tool.checkNull(token)) {
             return new ResponseEntity<>(new Result(Result.ERROR, "Đăng Nhập Thất Bại"), HttpStatus.OK);
         }

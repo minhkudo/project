@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=utf-8" %><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page session = "false" %>
 <%@ include file="../include/css.jsp" %>
 <%@ include file="../pageStudent/include/menu.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
@@ -6,7 +7,7 @@
     <div id="content-header">
         <div id="breadcrumb"><a href="<c:url value="/index"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> </div>
     </div>
-    <div class="container-fluid"><%=(String) session.getAttribute(session.getId()) %>
+    <div class="container-fluid">${token}
         <div class="row-fluid" ng-app="listStudent" ng-controller="studentController">
             <div class="span12">
                 <div class="widget-box">
@@ -57,7 +58,7 @@
                                                             url: urlBase + '/pageStudent/check',
                                                             params: {id_sts: "${id_sts}"},
                                                             headers: {
-                                                                Authorization: "<%=(String) session.getAttribute(session.getId()) %>"
+                                                                Authorization: "${token}"
                                                             }
                                                         }).then(
                                                                 function Succes(res) { // success

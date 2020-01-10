@@ -21,6 +21,7 @@ import com.dev.vin.demo.service.TeacherService;
 import com.dev.vin.demo.util.Share;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,7 +112,7 @@ public class PageAdminController {
 
     @PostMapping(value = "/teach/addRest")
     @ResponseBody
-    public ResponseEntity<Result> addRestPostTeach(Model model, @RequestBody Teach teachForm) {
+    public ResponseEntity<Result> addRestPostTeach(Model model, @RequestBody @Valid Teach teachForm) {
         System.out.println("teach,getCode(): " + teachForm.getCode());
         System.out.println("teach,getName(): " + teachForm.getName());
         System.out.println("teach,getPassword(): " + teachForm.getPassword());
@@ -222,7 +223,7 @@ public class PageAdminController {
     }
 
     @PostMapping(value = "/student/addRest")
-    public ResponseEntity<Result> addRestPostStudent(Model model, @RequestBody Student studentForm) {
+    public ResponseEntity<Result> addRestPostStudent(Model model, @RequestBody @Valid Student studentForm) {
         System.out.println("student,getCode(): " + studentForm.getCode());
         System.out.println("student,getName(): " + studentForm.getName());
         System.out.println("student,getPassword(): " + studentForm.getPassword());
@@ -329,7 +330,7 @@ public class PageAdminController {
 
     @PostMapping(value = "/subject/addRest")
     @ResponseBody
-    public ResponseEntity<Result> addRestPostSubject(Model model, @RequestBody Subject subjectForm) {
+    public ResponseEntity<Result> addRestPostSubject(Model model, @RequestBody @Valid Subject subjectForm) {
         System.out.println("subject,getCode(): " + subjectForm.getCode());
         System.out.println("subject,getName(): " + subjectForm.getName());
         System.out.println("subject,getNumber(): " + subjectForm.getNumber());
